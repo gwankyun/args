@@ -5,6 +5,8 @@ header-only，需C++11
 
 用法：
 ``` c++
+#include <args.hpp>
+
 args_t args(argc, argv);
 
 auto filename = get(args, 1, "--filename", "-f");
