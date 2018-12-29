@@ -70,7 +70,6 @@ std::vector<std::string> get(args_t &argument, Arg arg, Args ...args)
 	}
 	else if constexpr (is_same_v<Arg, string>)
 	{
-		INFO("log", "string");
 		auto itor = find_if(arg_list.begin(), arg_list.end(),
 			[&arg](auto &i)
 		{
@@ -78,31 +77,19 @@ std::vector<std::string> get(args_t &argument, Arg arg, Args ...args)
 		});
 		if (itor != arg_list.end())
 		{
-			INFO("log", "string");
-
 			auto &index = std::get<1>(*itor);
 
-			INFO("log", "index:{0}", index);
-
-			//d
 			auto v = skip_n(arg_list, index + 1);
-			for (auto &i : v)
-			{
-				INFO("log", std::get<0>(i));
-			}
 
 			auto vec = take_if(v,
 				[&index](auto &i)
 			{
 				auto &val = std::get<0>(i);
 				auto &ind = std::get<1>(i);
-				INFO("log", "val:{0} ind:{1}", val, ind);
 				return ind > index &&
 					val[0] != '-' &&
 					val[0] != '/';
 			});
-
-			INFO("log", vec.size());
 
 			for (auto &v : vec)
 			{
@@ -118,13 +105,11 @@ std::vector<std::string> get(args_t &argument, Arg arg, Args ...args)
 		}
 		else
 		{
-			INFO("log", "string");
 			return get(argument, forward<Args>(args)...);
 		}
 	}
 	else
 	{
-		INFO("log", "string");
 		return get(argument, forward<Args>(args)...);
 	}
 }

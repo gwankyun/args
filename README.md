@@ -1,7 +1,7 @@
 # args
 命令行參數解析
 
-header-only，需C++11
+header-only，需C++17
 
 用法：
 ``` c++
