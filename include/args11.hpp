@@ -1,38 +1,5 @@
 #pragma once
-#include <iostream>
-#include <string>
-#include <vector>
-#include <type_traits>
-#include <cstring>
-#include <utility>
-#include <algorithm>
-
-#include <spdlog/spdlog.h>
-#include <spdlog/sinks/stdout_color_sinks.h>
-#include <spdlog_easy.hpp>
-
-#include "range.hpp"
-
-using namespace std;
-
-class args_t
-{
-public:
-	args_t(int argc, char *argv[])
-	{
-		for (size_t i = 0; i < argc; i++)
-		{
-			arg_list.emplace_back(argv[i], i);
-		}
-	}
-
-	~args_t() = default;
-
-	std::vector<std::tuple<std::string, std::size_t>> arg_list;
-
-private:
-
-};
+#include "args_t.hpp"
 
 std::vector<std::string> get(args_t &argument)
 {
@@ -42,7 +9,11 @@ std::vector<std::string> get(args_t &argument)
 }
 
 template<typename ...Args>
-std::vector<std::string> get(args_t &argument, std::string arg, Args ...args)
+std::vector<std::string> get(args_t &argument, const char *arg, Args ...args)
+//template<typename Arg, typename ...Args>
+//std::vector<std::string> get(args_t &argument, 
+//	typename std::enable_if<std::is_same<Arg, std::string>::value, Arg>::type arg, 
+//	Args ...args)
 {
 	using namespace std;
 	vector<string> result;
@@ -89,12 +60,16 @@ std::vector<std::string> get(args_t &argument, std::string arg, Args ...args)
 
 template<typename ...Args>
 std::vector<std::string> get(args_t &argument, int arg, Args ...args)
+//template<typename Arg, typename ...Args>
+//std::vector<std::string> get(args_t &argument, 
+//	typename std::enable_if<std::is_integral<Arg>::value, Arg>::type arg, 
+//	Args ...args)
 {
 	using namespace std;
 	vector<string> result;
 	auto &arg_list = argument.arg_list;
 
-	if (arg >= arg_list.size())
+	if (std::size_t(arg) >= arg_list.size())
 	{
 		return std::move(result);
 	}
@@ -104,7 +79,7 @@ std::vector<std::string> get(args_t &argument, int arg, Args ...args)
 	{
 		auto &value = std::get<0>(i);
 		auto &index = std::get<1>(i);
-		return index <= arg && (value[0] == '-' || value[0] == '/');
+		return index <= std::size_t(arg) && (value[0] == '-' || value[0] == '/');
 	}))
 	{
 		return get(argument, forward<Args>(args)...);
@@ -114,9 +89,12 @@ std::vector<std::string> get(args_t &argument, int arg, Args ...args)
 	return std::move(result);
 }
 
-template<typename ...Args>
-std::vector<std::string> get(args_t &argument, const char* arg, Args ...args)
-{
-	using namespace std;
-	return get(argument, string(arg), forward<Args>(args)...);
-}
+//template<typename Arg, typename ...Args>
+//std::vector<std::string> get(args_t &argument,
+//	typename std::enable_if<(!std::is_same<Arg, std::string>::value) && (!std::is_integral<Arg>::value), Arg>::type arg,
+//	Args ...args)
+//{
+//	using namespace std;
+//	cout << "any" << endl;
+//	return get(argument, arg, forward<Args>(args)...);
+//}

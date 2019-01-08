@@ -1,38 +1,5 @@
 #pragma once
-#include <iostream>
-#include <string>
-#include <vector>
-#include <type_traits>
-#include <cstring>
-#include <utility>
-#include <algorithm>
-
-#include <spdlog/spdlog.h>
-#include <spdlog/sinks/stdout_color_sinks.h>
-#include <spdlog_easy.hpp>
-
-#include "range.hpp"
-
-using namespace std;
-
-class args_t
-{
-public:
-	args_t(int argc, char *argv[])
-	{
-		for (size_t i = 0; i < argc; i++)
-		{
-			arg_list.emplace_back(argv[i], i);
-		}
-	}
-
-	~args_t() = default;
-
-	std::vector<std::tuple<std::string, std::size_t>> arg_list;
-
-private:
-
-};
+#include "args_t.hpp"
 
 std::vector<std::string> get(args_t &argument)
 {
