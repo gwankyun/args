@@ -7,10 +7,6 @@
 #include <utility>
 #include <algorithm>
 
-#include <spdlog/spdlog.h>
-#include <spdlog/sinks/stdout_color_sinks.h>
-#include <spdlog_easy.hpp>
-
 #include "range.hpp"
 
 using namespace std;
